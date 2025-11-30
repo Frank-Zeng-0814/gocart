@@ -30,7 +30,9 @@ const ProductDescription = ({ product }) => {
                 <div className="flex flex-col gap-3 mt-14">
                     {product.rating.map((item,index) => (
                         <div key={index} className="flex gap-5 mb-10">
-                            <Image src={item.user.image} alt="" className="size-10 rounded-full" width={100} height={100} />
+                            {item.user.image && (
+                                <Image src={item.user.image} alt="" className="size-10 rounded-full" width={100} height={100} />
+                            )}
                             <div>
                                 <div className="flex items-center" >
                                     {Array(5).fill('').map((_, index) => (
@@ -48,7 +50,9 @@ const ProductDescription = ({ product }) => {
 
             {/* Store Page */}
             <div className="flex gap-3 mt-14">
-                <Image src={product.store.logo} alt="" className="size-11 rounded-full ring ring-slate-400" width={100} height={100} />
+                {product.store.logo && (
+                    <Image src={product.store.logo} alt="" className="size-11 rounded-full ring ring-slate-400" width={100} height={100} />
+                )}
                 <div>
                     <p className="font-medium text-slate-600">Product by {product.store.name}</p>
                     <Link href={`/shop/${product.store.username}`} className="flex items-center gap-1.5 text-green-500"> view store <ArrowRight size={14} /></Link>

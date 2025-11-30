@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import authSeller from "@/middleware/authSeller";
 import { getAuth } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 //toggle stock of a product
 export async function POST(request) {
@@ -14,7 +14,7 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-    const storeId = authSeller(userId);
+    const { storeId } = await authSeller(userId);
     if (!storeId) {
       return NextResponse.json({ error: "not authorized" }, { status: 401 });
     }
@@ -32,7 +32,7 @@ export async function POST(request) {
         inStock: !product.inStock,
       },
     });
-    return NextRequest.json({ message: "Product stock updated successfully" });
+    return NextResponse.json({ message: "Product stock updated successfully" });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
