@@ -63,7 +63,7 @@ const OrderSummary = ({ totalPrice, items }) => {
         orderData.couponCode = coupon.code;
       }
       //Create Order API Call
-      const { data } =await axios.post("/api/orders", orderData, {
+      const { data } = await axios.post("/api/orders", orderData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (paymentMethod === "STRIPE") {
@@ -136,7 +136,7 @@ const OrderSummary = ({ totalPrice, items }) => {
                 <option value="">Select Address</option>
                 {addressList.map((address, index) => (
                   <option key={index} value={index}>
-                    {address.name}, {address.city}, {address.state},{" "}
+                    {address.street}, {address.city}, {address.state},{" "}
                     {address.zip}
                   </option>
                 ))}
