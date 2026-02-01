@@ -1,85 +1,136 @@
-<div align="center">
-  <h1><img src="https://gocartshop.in/favicon.ico" width="20" height="20" alt="GoCart Favicon">
-   GoCart</h1>
-  <p>
-    An open-source multi-vendor e-commerce platform built with Next.js and Tailwind CSS.
-  </p>
-  <p>
-    <a href="https://github.com/GreatStackDev/goCart/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/GreatStackDev/goCart?style=for-the-badge" alt="License"></a>
-    <a href="https://github.com/GreatStackDev/goCart/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge" alt="PRs Welcome"></a>
-    <a href="https://github.com/GreatStackDev/goCart/issues"><img src="https://img.shields.io/github/issues/GreatStackDev/goCart?style=for-the-badge" alt="GitHub issues"></a>
-  </p>
-</div>
+# GoCart
 
----
-
-## 📖 Table of Contents
-
-- [✨ Features](#-features)
-- [🛠️ Tech Stack](#-tech-stack)
-- [🚀 Getting Started](#-getting-started)
-- [🤝 Contributing](#-contributing)
-- [📜 License](#-license)
-
----
+GoCart is an open-source multi-vendor e-commerce marketplace built with Next.js 15. It allows multiple sellers to register their own stores, manage products independently, and sell on a unified platform. The platform provides a full buyer shopping experience, seller management dashboard, and admin control panel.
 
 ## Features
 
-- **Multi-Vendor Architecture:** Allows multiple vendors to register, manage their own products, and sell on a single platform.
-- **Customer-Facing Storefront:** A beautiful and responsive user interface for customers to browse and purchase products.
-- **Vendor Dashboards:** Dedicated dashboards for vendors to manage products, view sales analytics, and track orders.
-- **Admin Panel:** A comprehensive dashboard for platform administrators to oversee vendors, products, and commissions.
+### Buyer
 
-## 🛠️ Tech Stack <a name="-tech-stack"></a>
+- Product browsing and category-based search
+- Shopping cart with Redux + database persistence
+- Multi-store checkout with Stripe online payment and Cash on Delivery (COD)
+- Shipping address management
+- Order history and tracking
+- Product ratings and reviews
+- Coupon / promo code validation
+- Plus membership (free shipping, exclusive coupons)
 
-- **Framework:** Next.js
-- **Styling:** Tailwind CSS
-- **UI Components:** Lucide React for icons
-- **State Management:** Redux Toolkit
+### Seller
 
-## 🚀 Getting Started <a name="-getting-started"></a>
+- Store registration and profile management
+- Product management (add, edit, toggle stock status)
+- Multi-image upload via ImageKit CDN
+- AI-powered product image analysis for auto-extracting product name and description (Gemini 2.0 Flash)
+- Sales dashboard (orders, revenue, ratings overview)
+- Order management
 
-First, install the dependencies. We recommend using `npm` for this project.
+### Admin
+
+- Store approval workflow (approve / reject / deactivate)
+- Coupon management (create, delete, auto-expiry)
+- Platform-wide statistics and analytics
+
+### Platform Capabilities
+
+- Multi-vendor architecture: a single checkout automatically splits orders by store
+- Event-driven user sync: Clerk Webhooks → Inngest background jobs → database sync
+- Automated coupon expiry scheduling via Inngest
+- Edge Runtime compatible (Neon Serverless Adapter)
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 15 (App Router + Turbopack) |
+| Styling | Tailwind CSS 4 |
+| State Management | Redux Toolkit |
+| Database | PostgreSQL (Neon Serverless) |
+| ORM | Prisma 6 + Neon Adapter |
+| Authentication | Clerk |
+| Payments | Stripe |
+| Image Storage | ImageKit |
+| AI | OpenAI SDK / Gemini 2.0 Flash |
+| Background Jobs | Inngest |
+| Charts | Recharts |
+| Icons | Lucide React |
+
+## Project Structure
+
+```
+app/
+├── (public)/          # Buyer pages (home, products, cart, orders)
+├── store/             # Seller dashboard (analytics, product management, orders)
+├── admin/             # Admin panel (approval, coupons, statistics)
+└── api/               # API routes
+    ├── product/       # Product endpoints
+    ├── store/         # Store & seller endpoints
+    ├── admin/         # Admin endpoints
+    ├── cart/          # Cart endpoints
+    ├── orders/        # Order endpoints
+    ├── address/       # Address endpoints
+    ├── coupon/        # Coupon endpoints
+    ├── rating/        # Rating endpoints
+    ├── stripe/        # Stripe webhook
+    └── inngest/       # Inngest background jobs
+```
+
+## Getting Started
+
+### Environment Variables
+
+The project requires the following environment variables. Configure them in `.env`:
+
+```env
+# Clerk
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+# Database (Neon PostgreSQL)
+DATABASE_URL=
+DIRECT_DATABASE_URL=
+
+# Stripe
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+
+# ImageKit
+IMAGEKIT_PUBLIC_KEY=
+IMAGEKIT_PRIVATE_KEY=
+IMAGEKIT_URL_ENDPOINT=
+
+# Inngest
+INNGEST_EVENT_KEY=
+INNGEST_SIGNING_KEY=
+
+# OpenAI / Gemini
+OPENAI_API_KEY=
+OPENAI_BASE_URL=
+OPENAI_MODEL=
+
+# Admin
+ADMIN_EMAILS=
+```
+
+### Install and Run
 
 ```bash
 npm install
-```
-
-Then, run the development server:
-
-```bash
+npx prisma generate
+npx prisma db push
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/(public)/page.js`. The page auto-updates as you edit the file.
+## Data Models
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Outfit](https://vercel.com/font), a new font family for Vercel.
+The platform has 8 core data models:
 
----
-
-## 🤝 Contributing <a name="-contributing"></a>
-
-We welcome contributions! Please see our [CONTRIBUTING.md](./CONTRIBUTING.md) for more details on how to get started.
-
----
-
-## 📜 License <a name="-license"></a>
-
-This project is licensed under the MIT License. See the [LICENSE.md](./LICENSE.md) file for details.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **User** — Buyers and sellers
+- **Store** — Vendor stores (with approval status)
+- **Product** — Marketplace products
+- **Order** — Orders (split by store)
+- **OrderItem** — Order line items
+- **Rating** — Product reviews
+- **Address** — Shipping addresses
+- **Coupon** — Promotional codes
